@@ -40,7 +40,7 @@ public class SwaggerConfig {
 				.apiInfo(apiInfo());
 	}
 
-	private ApiInfo apiInfo() {
+	private ApiInfo apiInfo() { 
 		return new ApiInfo(
 				"RESTful API With Spring Boot 2.2.0",
 				"Some description about your API.",
