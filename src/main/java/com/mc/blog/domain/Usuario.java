@@ -44,6 +44,9 @@ public class Usuario implements Serializable {
 	
 	@OneToMany(mappedBy="usuario", cascade= CascadeType.ALL)
 	private List<Endereco> enderecos = new ArrayList<>();
+
+	@OneToMany(mappedBy="usuario")
+	private List<Artigos> artigos = new ArrayList<>();
 	
 	@ElementCollection
 	@CollectionTable(name="TELEFONE")
