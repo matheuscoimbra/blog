@@ -55,15 +55,18 @@ public class DBService {
 		cli1 = usuarioRepository.save(cli1);
 		enderecoRepository.saveAll(Arrays.asList(e1));
 
-		Categoria c1 = new Categoria(1L,"JAVA");
-		Categoria c2 = new Categoria(2L,"BANCO DE DADOS");
-
+		Categoria c0 = new Categoria(1L,"PROGRAMACAO",null);
+		c0 =categoriaRepository.save(c0);
+		Categoria c1 = new Categoria(2L,"JAVA",null);
 		c1 =categoriaRepository.save(c1);
+		Categoria c2 = new Categoria(3L,"BANCO DE DADOS",c1);
 		c2 =categoriaRepository.save(c2);
+		Categoria c3 = new Categoria(4L,"SRING BOOT",c2);
+		c3 =categoriaRepository.save(c3);
 
 
 		Artigos artigos = new Artigos(null,"artigo 1","descricao do artigo 1","url",null,cli1,null);
-		artigos.setCategorias(Arrays.asList(c1,c2));
+		artigos.setCategorias(Arrays.asList(c1));
 
 		artigosRepository.save(artigos);
 
