@@ -1,17 +1,19 @@
 package com.mc.blog.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Table
@@ -22,12 +24,11 @@ public class Artigos implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "artigos_id",nullable = false)
-    @NonNull
     private Long id;
 
-
+    @Size(min = 2, max = 60, message = "Campo nome com tamanho inválido")
+    @NotNull(message = "Campo menssagem obrigatório")
     @Column(nullable = false)
-    @NonNull
     private String nome;
 
 
@@ -40,17 +41,21 @@ public class Artigos implements Serializable {
     private String url;
 
     @Lob
-    @Column(nullable = false)
+    @Column()
     private byte[] conteudo;
 
+    @JsonIgnoreProperties({"artigos"})
     @ManyToOne
     @JoinColumn(name="usuario_id")
     private Usuario usuario;
 
-    @OneToMany()
-    private List<Categoria> categorias = new ArrayList<>();
-
-
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "ARTIGOS_CATEGORIA",
+            joinColumns = @JoinColumn(name = "categoria_id"),
+            inverseJoinColumns = @JoinColumn(name = "artigos_id")
+    )
+    private List<Categoria> categorias;
 
 
 }

@@ -14,8 +14,7 @@ import com.mc.blog.services.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -67,6 +66,27 @@ public class UsuarioService {
 		updateData(newObj, obj);
 		return repo.save(newObj);
 	}
+
+	public Page<Usuario> filtro(Pageable pageable, String nome, String cpf) {
+		Usuario usuario = new Usuario();
+		usuario.setNome(nome);
+		usuario.setCpf(cpf);
+
+		Example<Usuario> example = Example.of(usuario, ExampleMatcher.matching().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)   // Match string containing pattern
+				.withIgnoreCase());
+		return repo.findAll(pageable);
+	}
+
+	public Optional<Usuario> filtroOnlyOne(String nome, String cpf) {
+		Usuario usuario = new Usuario();
+		usuario.setNome(nome);
+		usuario.setCpf(cpf);
+
+		Example<Usuario> example = Example.of(usuario, ExampleMatcher.matching().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)   // Match string containing pattern
+				.withIgnoreCase());
+		return repo.findOne(example);
+	}
+
 
 	public void delete(Long id) {
 		find(id);

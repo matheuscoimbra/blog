@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Data
 @Table
@@ -23,23 +22,19 @@ public class Usuario implements Serializable {
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name = "usuario_id",nullable = false)
-	@NonNull
 	private Long id;
 
 	@Column(nullable = false)
-	@NonNull
 	private String nome;
 	
 	@Column(unique=true,nullable = false)
-	@NonNull
 	private String email;
+
 	@Column(length=11,nullable = false)
-	@NonNull
 	private String cpf;
 
 	@JsonIgnore
 	@Column(nullable = false)
-	@NonNull
 	private String senha;
 	
 	@OneToMany(mappedBy="usuario", cascade= CascadeType.ALL)
@@ -55,7 +50,14 @@ public class Usuario implements Serializable {
 	@ElementCollection(fetch= FetchType.EAGER)
 	@CollectionTable(name="PERFIS")
 	private Set<Integer> perfis = new HashSet<>();
-	
+
+	public Usuario(Long id, String nome, String email, String cpf, String senha) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.cpf = cpf;
+		this.senha = senha;
+	}
 
 	public Set<Perfil> getPerfis() {
 		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
