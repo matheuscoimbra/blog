@@ -3,6 +3,7 @@ package com.mc.blog.resources;
 
 import com.mc.blog.config.ApiPageable;
 import com.mc.blog.domain.Categoria;
+import com.mc.blog.dto.CategoriaDTO;
 import com.mc.blog.services.CategoriaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 
 @Api(value = "CategoriaResource")
@@ -39,6 +41,13 @@ public class CategoriaResource {
 	@GetMapping
 	public ResponseEntity<Page<Categoria>> findPage( @ApiParam Pageable pageable) {
 		var list = service.findPage(pageable);
+		return ResponseEntity.ok(list);
+	}
+
+	@ApiPageable
+	@GetMapping(value = "/tree")
+	public ResponseEntity<List<CategoriaDTO>> findTree() {
+		var list = service.buildTree();
 		return ResponseEntity.ok(list);
 	}
 

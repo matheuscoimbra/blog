@@ -49,13 +49,10 @@ public class Artigos implements Serializable {
     @JoinColumn(name="usuario_id")
     private Usuario usuario;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "ARTIGOS_CATEGORIA",
-            joinColumns = @JoinColumn(name = "categoria_id"),
-            inverseJoinColumns = @JoinColumn(name = "artigos_id")
-    )
-    private List<Categoria> categorias;
+    @JsonIgnoreProperties({"artigos"})
+    @ManyToOne
+    @JoinColumn(name="categoria_id")
+    private Categoria categoria;
 
 
 }

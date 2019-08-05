@@ -38,7 +38,6 @@ public class DBService {
 
 	
 	public void instantiateTestDatabase() throws ParseException {
-		
 
 		
 		Usuario cli1 = new Usuario(1L, "Maria Silva", "nelio.cursos@gmail.com", "36378912377",  pe.encode("123"));
@@ -63,10 +62,14 @@ public class DBService {
 		c2 =categoriaRepository.save(c2);
 		Categoria c3 = new Categoria(4L,"SRING BOOT",c2);
 		c3 =categoriaRepository.save(c3);
+		Categoria c4 = new Categoria(5L,"AWS",c3);
+		c4 =categoriaRepository.save(c4);
+		Categoria c5 = new Categoria(6L,"ORACLE",c1);
+		c5 =categoriaRepository.save(c5);
 
 
 		Artigos artigos = new Artigos(null,"artigo 1","descricao do artigo 1","url",null,cli1,null);
-		artigos.setCategorias(Arrays.asList(c1));
+		artigos.setCategoria(c1);
 
 		artigosRepository.save(artigos);
 

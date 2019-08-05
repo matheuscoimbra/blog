@@ -1,5 +1,6 @@
 package com.mc.blog.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -8,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -31,6 +34,10 @@ public class Categoria implements Serializable {
     @JoinColumn(name="CATEGORIA_PAI_ID")
     private Categoria categoriaPai;
 
+    @JsonIgnore
+    @OneToMany(mappedBy="categoria")
+    private List<Artigos> artigos = new ArrayList<>();
+
 
     public Categoria(Long id, String nome, Categoria categoriaPai) {
         this.id = id;
@@ -51,6 +58,8 @@ public class Categoria implements Serializable {
         }
         return path;
     }
+
+
 
 
 

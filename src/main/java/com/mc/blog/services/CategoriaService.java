@@ -4,6 +4,7 @@ import com.mc.blog.converter.DozerConverter;
 import com.mc.blog.domain.Artigos;
 import com.mc.blog.domain.Categoria;
 import com.mc.blog.domain.enums.Perfil;
+import com.mc.blog.dto.CategoriaDTO;
 import com.mc.blog.repositories.ArtigosRepository;
 import com.mc.blog.repositories.CategoriaRepository;
 import com.mc.blog.security.UserSS;
@@ -18,9 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CategoriaService {
@@ -79,7 +80,7 @@ public class CategoriaService {
 		}
 
 		Artigos artigos = new Artigos();
-		artigos.setCategorias(Arrays.asList(categoria));
+		artigos.setCategoria(categoria);
 
 		Example<Artigos> exampleArt = Example.of(artigos, ExampleMatcher.matching().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)   // Match string containing pattern
 				.withIgnoreCase());
@@ -96,8 +97,44 @@ public class CategoriaService {
 
 		return repo.findAll(pageable);
 	}
-	
 
-	
+	public List<CategoriaDTO> buildTree(){
+		var paiNull = repo.findAllByCategoriaPaiIsNull();
+		List<CategoriaDTO> dtos = new ArrayList<>();
+		List<CategoriaDTO> tree = new ArrayList<>();
+		paiNull.stream().forEach(categoria -> {
+			tree.add(findTreeList(toDTO(categoria)));
+		});
 
+		return tree;
+
+	}
+
+
+	public CategoriaDTO findTreeList(CategoriaDTO categorias) {
+		List<Categoria> hasChild = repo.findAllByCategoriaPai_Id(categorias.getId());
+		if(!hasChild.isEmpty()) {
+			hasChild.stream().forEach(categoria -> {
+				categorias.setChild(findTreeList(toDTO(categoria)));
+
+			});
+		}else {
+			return categorias;
+		}
+		return categorias;
+	}
+
+
+	public CategoriaDTO findTree(CategoriaDTO categorias) {
+		Optional<Categoria> hasChild = repo.findByCategoriaPai_Id(categorias.getId());
+		if(hasChild.isPresent())
+			categorias.setChild(findTree(toDTO(hasChild.get())));
+		else
+			return categorias;
+		return categorias;
+	}
+
+	public CategoriaDTO toDTO(Categoria categoria){
+		return new CategoriaDTO(categoria.getId(),categoria.getNome(),categoria.getCategoriaPai()==null?null:categoria.getCategoriaPai().getId(),null,categoria.getPath());
+	}
 }
