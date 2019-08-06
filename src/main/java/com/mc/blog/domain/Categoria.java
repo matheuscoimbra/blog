@@ -36,7 +36,7 @@ public class Categoria implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy="categoria")
-    private List<Artigos> artigos = new ArrayList<>();
+    private List<Artigos> artigos;
 
 
     public Categoria(Long id, String nome, Categoria categoriaPai) {

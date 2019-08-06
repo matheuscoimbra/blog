@@ -6,10 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class CategoriaDTO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -21,10 +22,16 @@ public class CategoriaDTO implements Serializable {
 
     private Long parentId;
 
-    private CategoriaDTO child;
+    private List<CategoriaDTO> child = new ArrayList<>();
 
     private String path;
 
 
-
+    public CategoriaDTO() {
+        this.id = 0L;
+        this.nome = "";
+        this.parentId = 0L;
+        this.child = new ArrayList<CategoriaDTO>();
+        this.path = "";
+    }
 }

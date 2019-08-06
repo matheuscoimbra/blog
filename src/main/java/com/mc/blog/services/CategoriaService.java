@@ -98,41 +98,54 @@ public class CategoriaService {
 		return repo.findAll(pageable);
 	}
 
-	public List<CategoriaDTO> buildTree(){
-		var paiNull = repo.findAllByCategoriaPaiIsNull();
-		List<CategoriaDTO> dtos = new ArrayList<>();
-		List<CategoriaDTO> tree = new ArrayList<>();
-		paiNull.stream().forEach(categoria -> {
-			tree.add(findTreeList(toDTO(categoria)));
-		});
-
-		return tree;
-
-	}
-
-
-	public CategoriaDTO findTreeList(CategoriaDTO categorias) {
-		List<Categoria> hasChild = repo.findAllByCategoriaPai_Id(categorias.getId());
-		if(!hasChild.isEmpty()) {
-			hasChild.stream().forEach(categoria -> {
-				categorias.setChild(findTreeList(toDTO(categoria)));
-
-			});
-		}else {
-			return categorias;
+	public static  Map<Long, CategoriaDTO> buildIdMap(Collection<CategoriaDTO> targets){
+		Map<Long, CategoriaDTO> result = new HashMap<>();
+		if(targets!=null && !targets.isEmpty()){
+			final Iterator<CategoriaDTO> iterator = targets.iterator();
+			while (iterator.hasNext()){
+				final CategoriaDTO next = iterator.next();
+				if(next.getId()!=null){
+					result.put(next.getId(),next);
+				}
+			}
 		}
-		return categorias;
+		return result;
+	}
+
+	public List<CategoriaDTO> getTree(List<CategoriaDTO> all ){
+		final List<CategoriaDTO> result = new ArrayList<>();
+		final Map<Long, CategoriaDTO> allMap = buildIdMap(all);
+		final Iterator<CategoriaDTO> iterator = all.iterator();
+		while (iterator.hasNext()){
+			final CategoriaDTO next = iterator.next();
+			final Long parentId = next.getParentId();
+			if(parentId !=null){
+				final CategoriaDTO node = allMap.get(next.getId());
+				final CategoriaDTO nodeP = allMap.get(parentId);
+				if(nodeP != null){
+					if(nodeP.getChild()==null) {
+						nodeP.setChild(new ArrayList<>());
+					}
+						nodeP.getChild().add(node);
+				}
+			}else{
+
+				result.add(next);
+			}
+		}
+		return result;
+	}
+
+	public List<CategoriaDTO> buildTree(){
+		List<CategoriaDTO> dtos = new ArrayList<>();
+
+		repo.findAll().forEach(
+				categoria -> {dtos.add(toDTO(categoria));}
+		);
+		return  getTree(dtos);
 	}
 
 
-	public CategoriaDTO findTree(CategoriaDTO categorias) {
-		Optional<Categoria> hasChild = repo.findByCategoriaPai_Id(categorias.getId());
-		if(hasChild.isPresent())
-			categorias.setChild(findTree(toDTO(hasChild.get())));
-		else
-			return categorias;
-		return categorias;
-	}
 
 	public CategoriaDTO toDTO(Categoria categoria){
 		return new CategoriaDTO(categoria.getId(),categoria.getNome(),categoria.getCategoriaPai()==null?null:categoria.getCategoriaPai().getId(),null,categoria.getPath());

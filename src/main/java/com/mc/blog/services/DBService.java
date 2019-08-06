@@ -40,7 +40,7 @@ public class DBService {
 	public void instantiateTestDatabase() throws ParseException {
 
 		
-		Usuario cli1 = new Usuario(1L, "Maria Silva", "nelio.cursos@gmail.com", "36378912377",  pe.encode("123"));
+		Usuario cli1 = new Usuario(1L, "Maria Silva", "teste@teste.com", "36378912377",  pe.encode("123"));
 		
 		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
 
