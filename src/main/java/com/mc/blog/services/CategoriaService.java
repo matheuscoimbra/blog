@@ -112,6 +112,10 @@ public class CategoriaService {
 		return result;
 	}
 
+	public List<Categoria> categoriasByPai(Long id){
+	    return repo.findAllByCategoriaPai_Id(id);
+    }
+
 	public List<CategoriaDTO> getTree(List<CategoriaDTO> all ){
 		final List<CategoriaDTO> result = new ArrayList<>();
 		final Map<Long, CategoriaDTO> allMap = buildIdMap(all);
@@ -131,6 +135,30 @@ public class CategoriaService {
 			}else{
 
 				result.add(next);
+			}
+		}
+		return result;
+	}
+
+	public List<Long> getTreeLongs(List<CategoriaDTO> all ){
+		final List<Long> result = new ArrayList<>();
+		final Map<Long, CategoriaDTO> allMap = buildIdMap(all);
+		final Iterator<CategoriaDTO> iterator = all.iterator();
+		while (iterator.hasNext()){
+			final CategoriaDTO next = iterator.next();
+			final Long parentId = next.getParentId();
+			if(parentId !=null){
+				final CategoriaDTO node = allMap.get(next.getId());
+				final CategoriaDTO nodeP = allMap.get(parentId);
+				if(nodeP != null){
+					if(nodeP.getChild()==null) {
+						nodeP.setChild(new ArrayList<>());
+					}
+					nodeP.getChild().add(node);
+				}
+			}else{
+
+				result.add(next.getId());
 			}
 		}
 		return result;

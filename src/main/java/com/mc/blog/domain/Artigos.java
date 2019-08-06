@@ -27,14 +27,14 @@ public class Artigos implements Serializable {
     private Long id;
 
     @Size(min = 2, max = 60, message = "Campo nome com tamanho inválido")
-    @NotNull(message = "Campo menssagem obrigatório")
+    @NotNull(message = "Nome não informado")
     @Column(nullable = false)
     private String nome;
 
 
     @Column()
     @Size(max = 1000)
-    private String descricap;
+    private String descricao;
 
     @Column()
     @Size(max = 1000)
@@ -42,14 +42,16 @@ public class Artigos implements Serializable {
 
     @Lob
     @Column()
-    private byte[] conteudo;
+    private String conteudo;
 
     @JsonIgnoreProperties({"artigos"})
+    @NotNull(message = "Autor não informado")
     @ManyToOne
     @JoinColumn(name="usuario_id")
     private Usuario usuario;
 
     @JsonIgnoreProperties({"artigos"})
+    @NotNull(message = "Categoria não informada")
     @ManyToOne
     @JoinColumn(name="categoria_id")
     private Categoria categoria;

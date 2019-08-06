@@ -1,11 +1,10 @@
 package com.mc.blog.services;
 
 import com.mc.blog.converter.DozerConverter;
-import com.mc.blog.domain.Artigos;
-import com.mc.blog.domain.Endereco;
-import com.mc.blog.domain.Municipio;
-import com.mc.blog.domain.Usuario;
+import com.mc.blog.domain.*;
 import com.mc.blog.domain.enums.Perfil;
+import com.mc.blog.dto.ArtigosDTO;
+import com.mc.blog.dto.CategoriaDTO;
 import com.mc.blog.dto.UsuarioDTO;
 import com.mc.blog.dto.UsuarioNewDTO;
 import com.mc.blog.repositories.ArtigosRepository;
@@ -23,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +32,13 @@ public class ArtigosService {
 	@Autowired
 	private ArtigosRepository repo;
 
+	@Autowired
+	private CategoriaService categoriaService;
 
 	@Autowired
 	private UsuarioService usuarioService;
+
+	private List<Categoria> cats;
 
 	public Artigos find(Long id) {
 		
@@ -77,7 +81,7 @@ public class ArtigosService {
 	public Page<Artigos> filtro(String nome,String descricao, String nomeUsuario,Pageable pageable) {
 		Artigos artigos = new Artigos();
 		artigos.setNome(nome);
-		artigos.setDescricap(descricao);
+		artigos.setDescricao(descricao);
 		Optional<Usuario> usuario = usuarioService.filtroOnlyOne(nomeUsuario,null);
 		if(!usuario.isPresent()){
 			throw new ObjectNotFoundException("Sem resultado");
@@ -90,12 +94,62 @@ public class ArtigosService {
 	}
 
 	
-	public Page<Artigos> findPage(Pageable pageable) {
+	public Page<ArtigosDTO> findPage(Pageable pageable) {
 
-		return repo.findAll(pageable);
+		Page<Artigos> var =  repo.findAll(pageable);
+		return var.map(this::convertToImpostoDTO);
 	}
-	
 
-	
+	private ArtigosDTO convertToImpostoDTO(Artigos entity) {
+		return DozerConverter.parseObject(entity, ArtigosDTO.class);
+	}
 
+	private CategoriaDTO convertToCategoriaDTO(Artigos entity) {
+		return DozerConverter.parseObject(entity, CategoriaDTO.class);
+	}
+
+	public Page<Artigos> findArtigosByCategoria(Long id, Pageable pageable) {
+
+		/*List<CategoriaDTO> categoriaDTOS = new ArrayList<>();
+		categoriaDTOS.add(DozerConverter.parseObject(categoriaService.find(id), CategoriaDTO.class));
+
+		List<Long> categorias = categoriaService.getTreeLongs(categoriaDTOS);*/
+
+		List<Categoria> categorias = new ArrayList<>();
+		categorias.addAll(categoriasPaiFilho(id));
+		List<Long> ids = new ArrayList<>();
+		cats.forEach(
+				categoria -> ids.add(categoria.getId())
+		);
+
+		return repo.findAllByCategoriaIn(ids, pageable);
+
+	}
+
+
+	List<Categoria> categoriasPaiFilho(Long id){
+		if(cats==null){
+			cats = new ArrayList<>();
+		}
+		List<Categoria> categorias = categoriaService.categoriasByPai(id);
+		if(categorias!=null){
+			categorias.forEach(
+					categoria -> {
+						categoriasPaiFilho(categoria.getId());
+					}
+			);
+		}else{
+			return categorias;
+		}
+		cats.addAll(categorias);
+		return categorias;
+	}
+
+	public List<Categoria> getCats() {
+		return cats;
+	}
+
+	public void setCats(List<Categoria> cats) {
+		this.cats = cats;
+	}
 }

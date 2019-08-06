@@ -68,7 +68,7 @@ public class DBService {
 		c5 =categoriaRepository.save(c5);
 
 
-		Artigos artigos = new Artigos(null,"artigo 1","descricao do artigo 1","url",null,cli1,null);
+		Artigos artigos = new Artigos(null,"artigo 1","descricao do artigo 1","url","Conteudo",cli1,null);
 		artigos.setCategoria(c1);
 
 		artigosRepository.save(artigos);
