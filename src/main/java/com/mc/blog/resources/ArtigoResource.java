@@ -55,7 +55,7 @@ public class ArtigoResource {
 
 	@ApiPageable
 	@GetMapping(path = {"/{id}/artigos"})
-	public ResponseEntity<Page<Artigos>> findArtigosByCategoria(@PathVariable Long id,Pageable pageable){
+	public ResponseEntity<Page<ArtigosDTO>> findArtigosByCategoria(@PathVariable Long id,Pageable pageable){
 		var obj = service.findArtigosByCategoria(id,pageable);
 		return ResponseEntity.ok().body(obj);
 	}

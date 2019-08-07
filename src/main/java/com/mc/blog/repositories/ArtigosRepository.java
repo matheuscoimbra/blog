@@ -17,7 +17,7 @@ public interface ArtigosRepository extends JpaRepository<Artigos, Long> {
 	@Transactional(readOnly=true)
 	public Page<Artigos> findAll(Pageable pageable);
 
-	Page<Artigos> findAllByCategoriaIn(List<Long> categoria_id, Pageable pageable);
+	Page<Artigos> findAllByCategoria_IdIn(List<Long> categoria_id, Pageable pageable);
 
 
 

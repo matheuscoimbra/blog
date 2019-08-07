@@ -5,20 +5,15 @@ import com.mc.blog.domain.*;
 import com.mc.blog.domain.enums.Perfil;
 import com.mc.blog.dto.ArtigosDTO;
 import com.mc.blog.dto.CategoriaDTO;
-import com.mc.blog.dto.UsuarioDTO;
-import com.mc.blog.dto.UsuarioNewDTO;
+
 import com.mc.blog.repositories.ArtigosRepository;
-import com.mc.blog.repositories.EnderecoRepository;
-import com.mc.blog.repositories.UsuarioRepository;
+
 import com.mc.blog.security.UserSS;
 import com.mc.blog.services.exceptions.AuthorizationException;
-import com.mc.blog.services.exceptions.DataIntegrityException;
 import com.mc.blog.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.*;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -97,10 +92,10 @@ public class ArtigosService {
 	public Page<ArtigosDTO> findPage(Pageable pageable) {
 
 		Page<Artigos> var =  repo.findAll(pageable);
-		return var.map(this::convertToImpostoDTO);
+		return var.map(this::convertToArtigosDTO);
 	}
 
-	private ArtigosDTO convertToImpostoDTO(Artigos entity) {
+	private ArtigosDTO convertToArtigosDTO(Artigos entity) {
 		return DozerConverter.parseObject(entity, ArtigosDTO.class);
 	}
 
@@ -108,21 +103,17 @@ public class ArtigosService {
 		return DozerConverter.parseObject(entity, CategoriaDTO.class);
 	}
 
-	public Page<Artigos> findArtigosByCategoria(Long id, Pageable pageable) {
+	public Page<ArtigosDTO> findArtigosByCategoria(Long id, Pageable pageable) {
 
-		/*List<CategoriaDTO> categoriaDTOS = new ArrayList<>();
-		categoriaDTOS.add(DozerConverter.parseObject(categoriaService.find(id), CategoriaDTO.class));
-
-		List<Long> categorias = categoriaService.getTreeLongs(categoriaDTOS);*/
-
-		List<Categoria> categorias = new ArrayList<>();
-		categorias.addAll(categoriasPaiFilho(id));
+		cats = new ArrayList<>();
+		categoriasPaiFilho(id);
 		List<Long> ids = new ArrayList<>();
 		cats.forEach(
 				categoria -> ids.add(categoria.getId())
 		);
-
-		return repo.findAllByCategoriaIn(ids, pageable);
+		ids.add(id);
+		Page<ArtigosDTO> artigosDTOS = repo.findAllByCategoria_IdIn(ids, pageable).map(this::convertToArtigosDTO);
+		return artigosDTOS;
 
 	}
 
@@ -138,8 +129,6 @@ public class ArtigosService {
 						categoriasPaiFilho(categoria.getId());
 					}
 			);
-		}else{
-			return categorias;
 		}
 		cats.addAll(categorias);
 		return categorias;

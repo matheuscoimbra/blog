@@ -71,7 +71,16 @@ public class DBService {
 		Artigos artigos = new Artigos(null,"artigo 1","descricao do artigo 1","url","Conteudo",cli1,null);
 		artigos.setCategoria(c1);
 
-		artigosRepository.save(artigos);
+        Artigos artigos2 = new Artigos(null,"artigo 1","descricao do artigo 1","url","Conteudo",cli1,null);
+        artigos2.setCategoria(c5);
+
+        Artigos artigos3 = new Artigos(null,"artigo 1","descricao do artigo 3","url","Conteudo",cli1,null);
+        artigos3.setCategoria(c3);
+
+        Artigos artigos4 = new Artigos(null,"artigo 1","descricao do artigo 4","url","Conteudo",cli1,null);
+        artigos4.setCategoria(c4);
+
+		artigosRepository.saveAll(Arrays.asList(artigos,artigos2,artigos3,artigos4));
 
 	}
 }
