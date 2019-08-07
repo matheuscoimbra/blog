@@ -15,6 +15,7 @@ public class UserSS implements UserDetails {
 	private Long id;
 	private String email;
 	private String senha;
+	private String token;
 	private Collection<? extends GrantedAuthority> authorities;
 	
 	public UserSS() {
@@ -23,9 +24,9 @@ public class UserSS implements UserDetails {
 	public UserSS(Long id, String email, String senha, Set<Perfil> perfis) {
 		super();
 		this.id = id;
+		this.authorities = perfis.stream().map(x -> new SimpleGrantedAuthority(x.getDescricao())).collect(Collectors.toList());
 		this.email = email;
 		this.senha = senha;
-		this.authorities = perfis.stream().map(x -> new SimpleGrantedAuthority(x.getDescricao())).collect(Collectors.toList());
 	}
 
 	public Long getId() {
@@ -69,5 +70,13 @@ public class UserSS implements UserDetails {
 	
 	public boolean hasRole(Perfil perfil) {
 		return getAuthorities().contains(new SimpleGrantedAuthority(perfil.getDescricao()));
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 }
