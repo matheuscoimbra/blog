@@ -57,4 +57,9 @@ public class Artigos implements Serializable {
     private Categoria categoria;
 
 
+    public String getUserNome(){
+        return usuario.getNome();
+    }
+
+
 }

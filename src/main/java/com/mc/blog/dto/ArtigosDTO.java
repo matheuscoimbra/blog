@@ -22,14 +22,13 @@ public class ArtigosDTO implements Serializable {
     @JsonProperty("id")
     private Long key;
 
-
     private String nome;
-
-
 
     private String descricao;
 
+    private String url;
 
-
+    @JsonProperty("autor")
+    private String userNome;
 
 }

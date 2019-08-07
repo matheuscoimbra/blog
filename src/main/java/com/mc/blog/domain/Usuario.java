@@ -1,6 +1,7 @@
 package com.mc.blog.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mc.blog.domain.enums.Perfil;
 import lombok.*;
 
