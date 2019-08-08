@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EstatisticaRepository extends JpaRepository<Estatistica, Long> {
 
-
+    Estatistica findTopByOrderByIdDesc();
 
 }
