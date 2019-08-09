@@ -33,7 +33,7 @@ public class Estatistica implements Serializable {
     private Long artigos;
 
     @JsonFormat
-            (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+            (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     @Column()
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;

@@ -56,6 +56,7 @@ public class UsuarioService {
 	@Transactional
 	public Usuario insert(Usuario obj) {
 		obj.setId(null);
+		obj.setIsAtivo(true);
 		obj = repo.save(obj);
 		enderecoRepository.saveAll(obj.getEnderecos());
 		return obj;
@@ -71,6 +72,7 @@ public class UsuarioService {
 		Usuario usuario = new Usuario();
 		usuario.setNome(nome);
 		usuario.setCpf(cpf);
+		usuario.setIsAtivo(true);
 
 		Example<Usuario> example = Example.of(usuario, ExampleMatcher.matching().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)   // Match string containing pattern
 				.withIgnoreCase());
@@ -81,6 +83,7 @@ public class UsuarioService {
 		Usuario usuario = new Usuario();
 		usuario.setNome(nome);
 		usuario.setCpf(cpf);
+		usuario.setIsAtivo(true);
 
 		Example<Usuario> example = Example.of(usuario, ExampleMatcher.matching().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)   // Match string containing pattern
 				.withIgnoreCase());
@@ -89,9 +92,10 @@ public class UsuarioService {
 
 
 	public void delete(Long id) {
-		find(id);
+		Usuario user = find(id);
 		try {
-			repo.deleteById(id);
+			user.setIsAtivo(false);
+			repo.save(user);
 		}
 		catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não é possível excluir porque há pedidos relacionados");
@@ -108,7 +112,7 @@ public class UsuarioService {
 			throw new AuthorizationException("Acesso negado");
 		}
 	
-		Usuario obj = repo.findByEmail(email);
+		Usuario obj = repo.findByEmailAAndIsAtivoTrue(email);
 		if (obj == null) {
 			throw new ObjectNotFoundException(
 					"Objeto não encontrado! Id: " + user.getId() + ", Tipo: " + Usuario.class.getName());
@@ -118,7 +122,7 @@ public class UsuarioService {
 	
 	public Page<Usuario> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		return repo.findAll(pageRequest);
+		return repo.findAllByIsAtivoTrue(pageRequest);
 	}
 	
 	public Usuario fromDTO(UsuarioDTO objDto) {

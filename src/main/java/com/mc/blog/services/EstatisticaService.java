@@ -30,7 +30,7 @@ public class EstatisticaService {
     private UsuarioRepository usuarioRepository;
 
     @Async
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 1000000)
     public void scheduleFixedDelayTask() throws InterruptedException {
         Long categorias = categoriaRepository.count();
         Long artigos = artigosRepository.count();

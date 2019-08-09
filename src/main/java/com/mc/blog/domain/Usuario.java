@@ -37,6 +37,10 @@ public class Usuario implements Serializable {
 	@JsonIgnore
 	@Column(nullable = false)
 	private String senha;
+
+	@JsonIgnore
+	@Column()
+	private Boolean isAtivo;
 	
 	@OneToMany(mappedBy="usuario", cascade= CascadeType.ALL)
 	private List<Endereco> enderecos = new ArrayList<>();
