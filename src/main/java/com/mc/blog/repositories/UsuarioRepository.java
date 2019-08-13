@@ -11,13 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>, JpaSpecificationExecutor<Usuario> {
-    @Transactional(readOnly=true)
-    Page<Usuario> findAllByNomeIgnoreCaseContainingAAndIsAtivoTrueOrderByNome(String nome, Pageable pageable);
 
     @Transactional(readOnly=true)
-    Usuario findByEmailAAndIsAtivoTrue(String email);
+    Page<Usuario> findAllByNomeIgnoreCaseContainingAndIsAtivoTrueOrderByNome(String nome, Pageable pageable);
+
+    @Transactional(readOnly=true)
+    Usuario findByEmailAndIsAtivoTrue(String email);
 
     @Transactional(readOnly=true)
     Page<Usuario> findAllByIsAtivoTrue(Pageable pageable);
+
+    @Transactional(readOnly=true)
+    Usuario findByEmail(String email);
+
 
 }
