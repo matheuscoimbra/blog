@@ -1,15 +1,9 @@
 package com.mc.blog.services;
 
-import com.mc.blog.domain.Artigos;
-import com.mc.blog.domain.Categoria;
-import com.mc.blog.domain.Endereco;
-import com.mc.blog.domain.Usuario;
+import com.mc.blog.domain.*;
 import com.mc.blog.domain.enums.Perfil;
-import com.mc.blog.repositories.ArtigosRepository;
-import com.mc.blog.repositories.CategoriaRepository;
-import com.mc.blog.repositories.EnderecoRepository;
+import com.mc.blog.repositories.*;
 
-import com.mc.blog.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +30,9 @@ public class DBService {
 	@Autowired
 	private ArtigosRepository artigosRepository;
 
+	@Autowired
+	private MunicipioRepository municipioRepository;
+
 	
 	public void instantiateTestDatabase() throws ParseException {
 
@@ -45,7 +42,14 @@ public class DBService {
 		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
 
 		cli1.addPerfil(Perfil.ADMIN);
-		
+
+		Municipio m1 = new Municipio(1L,"São Luis", "sl");
+		Municipio m2 = new Municipio(2L,"São Bento", "sb");
+		Municipio m3 = new Municipio(3L,"Rosário", "ro");
+		Municipio m4 = new Municipio(4L,"Raposa", "ra");
+		 municipioRepository.saveAll(Arrays.asList(m1,m2,m3,m4));
+
+
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220834", cli1, null);
 
 		

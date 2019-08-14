@@ -39,6 +39,11 @@ public class UsuarioResource {
 
     @RequestMapping(method= RequestMethod.POST)
     public ResponseEntity<Void> insert(@Valid @RequestBody UsuarioNewDTO objDto) {
+       /* UsuarioNewDTO usuarioNewDTO = UsuarioNewDTO.builder()
+                .bairro("teste")
+                .cep("121212")
+                .logradouro("fdfd")
+                .build();*/
         Usuario obj = service.fromDTO(objDto);
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
