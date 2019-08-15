@@ -33,23 +33,35 @@ public class CategoriaService {
 	private ArtigosRepository artigosRepository;
 
 	@Transactional(readOnly = true)
-	public Categoria find(Long id) {
+	public CategoriaDTO findDTO(Long id) {
 		
 		UserSS user = UserService.authenticated();
 		if (user==null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
 			throw new AuthorizationException("Acesso negado");
 		}
 		
+		Optional<CategoriaDTO> obj = Optional.ofNullable(toDTO(repo.findById(id).get()));
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
+	}
+
+
+	@Transactional(readOnly = true)
+	public Categoria find(Long id) {
+
+		UserSS user = UserService.authenticated();
+		if (user==null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+
 		Optional<Categoria> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
 	}
 	
 	@Transactional
-	public Categoria insert(Categoria obj) {
-		obj.setId(null);
-		obj = repo.save(obj);
-		return obj;
+	public Categoria insert(CategoriaDTO obj) {
+		return repo.save(fromDTO(obj));
 	}
 	
 	public Categoria update(Categoria obj) {
@@ -93,9 +105,10 @@ public class CategoriaService {
 		repo.deleteById(id);
 	}
 
-	public Page<Categoria> findPage(Pageable pageable) {
+	public Page<CategoriaDTO> findPage(Pageable pageable) {
+		var page = repo.findAll(pageable);
+		return page.map(this::toDTO);
 
-		return repo.findAll(pageable);
 	}
 
 	public static  Map<Long, CategoriaDTO> buildIdMap(Collection<CategoriaDTO> targets){
@@ -178,4 +191,17 @@ public class CategoriaService {
 	public CategoriaDTO toDTO(Categoria categoria){
 		return new CategoriaDTO(categoria.getId(),categoria.getNome(),categoria.getCategoriaPai()==null?null:categoria.getCategoriaPai().getId(),null,categoria.getPath());
 	}
+
+	public Categoria fromDTO(CategoriaDTO categoria){
+		return Categoria.builder().nome(categoria.getNome()).categoriaPai(find(categoria.getParentId())).id(null).build();
+	}
+
+
+
+
+
 }
+
+
+
+

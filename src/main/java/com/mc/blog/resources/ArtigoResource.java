@@ -4,6 +4,7 @@ package com.mc.blog.resources;
 import com.mc.blog.config.ApiPageable;
 import com.mc.blog.domain.Artigos;
 import com.mc.blog.domain.Categoria;
+import com.mc.blog.dto.ArtigoNewDTO;
 import com.mc.blog.dto.ArtigosDTO;
 import com.mc.blog.services.ArtigosService;
 import io.swagger.annotations.Api;
@@ -31,24 +32,33 @@ public class ArtigoResource {
 	private ArtigosService service;
 
 	@PostMapping
-	public ResponseEntity<Artigos> insert(@Valid @RequestBody Artigos obj) {
-		obj = service.insert(obj);
+	public ResponseEntity<Artigos> insert(@Valid @RequestBody ArtigoNewDTO obj) {
+		var art = service.insert(obj);
 
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).body(obj);
+				.path("/{id}").buildAndExpand(art.getId()).toUri();
+		return ResponseEntity.created(uri).body(art);
 	}
 
 	@ApiPageable
-	@GetMapping
+	@GetMapping(value = "pagina")
 	public ResponseEntity<Page<ArtigosDTO>> findPage(@ApiParam Pageable pageable) {
 		var list = service.findPage(pageable);
 		return ResponseEntity.ok(list);
 	}
 
 
+
+
+	@ApiPageable
+	@GetMapping
+	public ResponseEntity<Page<ArtigoNewDTO>> findPageDTO(@ApiParam Pageable pageable) {
+		var list = service.findPageNewDTO(pageable);
+		return ResponseEntity.ok(list);
+	}
+
 	@GetMapping(path = {"/{id}"})
-	public ResponseEntity<Artigos> findById(@PathVariable Long id){
+	public ResponseEntity<ArtigoNewDTO> findById(@PathVariable Long id){
 		var obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	}

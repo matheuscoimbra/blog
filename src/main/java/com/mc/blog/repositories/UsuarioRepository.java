@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>, JpaSpecificationExecutor<Usuario> {
@@ -24,5 +26,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>, JpaSpec
     @Transactional(readOnly=true)
     Usuario findByEmail(String email);
 
-
+    @Transactional(readOnly=true)
+    List<Usuario> findAllByIsAtivoTrue();
 }

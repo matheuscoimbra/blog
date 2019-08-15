@@ -43,6 +43,8 @@ public class DBService {
 
 		cli1.addPerfil(Perfil.ADMIN);
 
+		cli1.setIsAtivo(true);
+
 		Municipio m1 = new Municipio(1L,"São Luis", "sl");
 		Municipio m2 = new Municipio(2L,"São Bento", "sb");
 		Municipio m3 = new Municipio(3L,"Rosário", "ro");
@@ -50,10 +52,10 @@ public class DBService {
 		 municipioRepository.saveAll(Arrays.asList(m1,m2,m3,m4));
 
 
-		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220834", cli1, null);
+		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220834", cli1, m1);
 
 		
-		cli1.getEnderecos().addAll(Arrays.asList(e1));
+		cli1.setEnderecos(e1);
 
 		cli1 = usuarioRepository.save(cli1);
 		enderecoRepository.saveAll(Arrays.asList(e1));

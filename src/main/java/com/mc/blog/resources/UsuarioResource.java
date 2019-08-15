@@ -26,9 +26,10 @@ public class UsuarioResource {
     private UsuarioService service;
 
     @RequestMapping(value="/{id}", method= RequestMethod.GET)
-    public ResponseEntity<Usuario> find(@PathVariable Long id) {
+    public ResponseEntity<UsuarioNewDTO> find(@PathVariable Long id) {
         Usuario obj = service.find(id);
-        return ResponseEntity.ok().body(obj);
+        UsuarioNewDTO dto = service.toDTO(obj);
+        return ResponseEntity.ok().body(dto);
     }
 
     @RequestMapping(value="/email", method= RequestMethod.GET)

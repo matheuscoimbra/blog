@@ -3,6 +3,7 @@ package com.mc.blog.services;
 import com.mc.blog.converter.DozerConverter;
 import com.mc.blog.domain.*;
 import com.mc.blog.domain.enums.Perfil;
+import com.mc.blog.dto.ArtigoNewDTO;
 import com.mc.blog.dto.ArtigosDTO;
 import com.mc.blog.dto.CategoriaDTO;
 
@@ -35,25 +36,33 @@ public class ArtigosService {
 
 	private List<Categoria> cats;
 
-	public Artigos find(Long id) {
+	public ArtigoNewDTO find(Long id) {
 		
 		UserSS user = UserService.authenticated();
 		if (user==null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
 			throw new AuthorizationException("Acesso negado");
 		}
 		
-		Optional<Artigos> obj = repo.findById(id);
+		Optional<ArtigoNewDTO> obj = Optional.ofNullable(convertToArtigoNewDTO(repo.findById(id).get()));
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Artigos.class.getName()));
 	}
 	
 	@Transactional
-	public Artigos insert(Artigos obj) {
-		obj.setId(null);
-		obj = repo.save(obj);
-		return obj;
+	public Artigos insert(ArtigoNewDTO obj) {
+
+		Artigos art = fromNewDTO(obj);
+		art.setId(null);
+		art = repo.save(art);
+		return art;
 	}
-	
+
+	private Artigos fromNewDTO(ArtigoNewDTO obj) {
+		return Artigos.builder().categoria(categoriaService.find(obj.getCategoria())).
+				usuario(usuarioService.find(obj.getUsuario())).nome(obj.getNome()).
+				conteudo(obj.getConteudo()).descricao(obj.getDescricao()).url(obj.getUrl()).build();
+	}
+
 	public Artigos update(Artigos obj) {
 		return repo.findById(obj.getId())
 				.map(g -> {
@@ -95,8 +104,21 @@ public class ArtigosService {
 		return var.map(this::convertToArtigosDTO);
 	}
 
+	public Page<ArtigoNewDTO> findPageNewDTO(Pageable pageable) {
+
+		Page<Artigos> var =  repo.findAll(pageable);
+		return var.map(this::convertToArtigoNewDTO);
+	}
+
 	private ArtigosDTO convertToArtigosDTO(Artigos entity) {
 		return DozerConverter.parseObject(entity, ArtigosDTO.class);
+	}
+
+	private ArtigoNewDTO convertToArtigoNewDTO(Artigos e) {
+		return ArtigoNewDTO.builder().id(e.getId())
+				.categoria(e.getCategoria().getId()).usuario(e.getUsuario().getId())
+				.conteudo(e.getConteudo()).descricao(e.getDescricao())
+				.nome(e.getNome()).url(e.getUrl()).build();
 	}
 
 	private CategoriaDTO convertToCategoriaDTO(Artigos entity) {

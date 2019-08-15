@@ -52,4 +52,7 @@ public class UsuarioNewDTO implements Serializable {
 	private Long mununicipioId;
 
 
+	private Long id;
+
+
 }

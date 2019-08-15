@@ -42,8 +42,8 @@ public class Usuario implements Serializable {
 	@Column()
 	private Boolean isAtivo;
 	
-	@OneToMany(mappedBy="usuario", cascade= CascadeType.ALL)
-	private List<Endereco> enderecos = new ArrayList<>();
+	@OneToOne(mappedBy="usuario", cascade= CascadeType.ALL)
+	private Endereco enderecos;
 
 	@OneToMany(mappedBy="usuario")
 	private List<Artigos> artigos = new ArrayList<>();

@@ -49,6 +49,7 @@ public class UsuarioService {
 		}
 		
 		Optional<Usuario> obj = repo.findById(id);
+
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Usuario.class.getName()));
 	}
@@ -58,7 +59,7 @@ public class UsuarioService {
 		obj.setId(null);
 		obj.setIsAtivo(true);
 		obj = repo.save(obj);
-		enderecoRepository.saveAll(obj.getEnderecos());
+		enderecoRepository.save(obj.getEnderecos());
 		return obj;
 	}
 	
@@ -103,7 +104,7 @@ public class UsuarioService {
 	}
 	
 	public List<Usuario> findAll() {
-		return repo.findAll();
+		return repo.findAllByIsAtivoTrue();
 	}
 	
 	public Usuario findByEmail(String email) {
@@ -136,7 +137,7 @@ public class UsuarioService {
 		Municipio cid = new Municipio(objDto.getMununicipioId(), null, null);
 		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
 
-		cli.getEnderecos().add(end);
+		cli.setEnderecos(end);
 		cli.getTelefones().add(objDto.getTelefone1());
 		if (objDto.getTelefone2()!=null) {
 			cli.getTelefones().add(objDto.getTelefone2());
@@ -145,6 +146,26 @@ public class UsuarioService {
 			cli.getTelefones().add(objDto.getTelefone3());
 		}
 		return cli;
+	}
+
+	public UsuarioNewDTO toDTO(Usuario o) {
+
+		UsuarioNewDTO usuarioNewDTO = new UsuarioNewDTO();
+		//usuarioNewDTO.setSenha(o.getSenha());
+		usuarioNewDTO.setNome(o.getNome());
+		usuarioNewDTO.setBairro(o.getEnderecos().getBairro());
+		usuarioNewDTO.setAdmin(o.getPerfis().contains(Perfil.ADMIN)?true:false);
+		usuarioNewDTO.setCep(o.getEnderecos().getCep());
+		usuarioNewDTO.setEmail(o.getEmail());
+		usuarioNewDTO.setNumero(o.getEnderecos().getNumero());
+		usuarioNewDTO.setCpfOuCnpj(o.getCpf());
+		usuarioNewDTO.setId(o.getId());
+		usuarioNewDTO.setLogradouro(o.getEnderecos().getLogradouro());
+		usuarioNewDTO.setMununicipioId(o.getEnderecos().getMunicipio().getId());
+		usuarioNewDTO.setComplemento(o.getEnderecos().getComplemento());
+
+		return usuarioNewDTO;
+
 	}
 	
 	private void updateData(Usuario newObj, Usuario obj) {
