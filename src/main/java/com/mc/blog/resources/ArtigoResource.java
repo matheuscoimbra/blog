@@ -5,6 +5,7 @@ import com.mc.blog.config.ApiPageable;
 import com.mc.blog.domain.Artigos;
 import com.mc.blog.domain.Categoria;
 import com.mc.blog.dto.ArtigoNewDTO;
+import com.mc.blog.dto.ArtigosCategoriaDTO;
 import com.mc.blog.dto.ArtigosDTO;
 import com.mc.blog.services.ArtigosService;
 import io.swagger.annotations.Api;
@@ -65,7 +66,7 @@ public class ArtigoResource {
 
 	@ApiPageable
 	@GetMapping(path = {"/{id}/artigos"})
-	public ResponseEntity<Page<ArtigosDTO>> findArtigosByCategoria(@PathVariable Long id,Pageable pageable){
+	public ResponseEntity<ArtigosCategoriaDTO> findArtigosByCategoria(@PathVariable Long id, Pageable pageable){
 		var obj = service.findArtigosByCategoria(id,pageable);
 		return ResponseEntity.ok().body(obj);
 	}

@@ -4,6 +4,7 @@ import com.mc.blog.converter.DozerConverter;
 import com.mc.blog.domain.*;
 import com.mc.blog.domain.enums.Perfil;
 import com.mc.blog.dto.ArtigoNewDTO;
+import com.mc.blog.dto.ArtigosCategoriaDTO;
 import com.mc.blog.dto.ArtigosDTO;
 import com.mc.blog.dto.CategoriaDTO;
 
@@ -125,7 +126,7 @@ public class ArtigosService {
 		return DozerConverter.parseObject(entity, CategoriaDTO.class);
 	}
 
-	public Page<ArtigosDTO> findArtigosByCategoria(Long id, Pageable pageable) {
+	public ArtigosCategoriaDTO findArtigosByCategoria(Long id, Pageable pageable) {
 
 		cats = new ArrayList<>();
 		categoriasPaiFilho(id);
@@ -135,7 +136,12 @@ public class ArtigosService {
 		);
 		ids.add(id);
 		Page<ArtigosDTO> artigosDTOS = repo.findAllByCategoria_IdIn(ids, pageable).map(this::convertToArtigosDTO);
-		return artigosDTOS;
+
+		Categoria categoria = categoriaService.find(id);
+		categoria.setCategoriaPai(null);
+		categoria.setArtigos(null);
+		ArtigosCategoriaDTO artigosCategoriaDTO= ArtigosCategoriaDTO.builder().artigosDTOPage(artigosDTOS).categoria(categoria).build();
+		return artigosCategoriaDTO;
 
 	}
 
