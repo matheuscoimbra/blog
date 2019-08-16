@@ -3,7 +3,7 @@ package com.mc.blog.domain.enums;
 public enum Perfil {
 	
 	ADMIN(1, "ROLE_ADMIN"),
-	Usuario(2, "ROLE_Usuario");
+	Usuario(2, "ROLE_USUARIO");
 	
 	private int cod;
 	private String descricao;

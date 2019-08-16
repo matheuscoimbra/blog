@@ -1,6 +1,7 @@
 package com.mc.blog.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.mc.blog.dto.CredenciaisDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -22,6 +24,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	private AuthenticationManager authenticationManager;
     
     private JWTUtil jwtUtil;
+
+    private Gson gson = new Gson();
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
     	setAuthenticationFailureHandler(new JWTAuthenticationFailureHandler());
@@ -52,12 +56,27 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse res,
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
-	
+        ObjectMapper mapper = new ObjectMapper();
+
+        PrintWriter out = res.getWriter();
+
 		String username = ((UserSS) auth.getPrincipal()).getUsername();
         String token = jwtUtil.generateToken(username);
+
+        UserSS us = ((UserSS) auth.getPrincipal());
+
+        us.setToken(token);
+
+        String user = mapper.writeValueAsString(us);
+
         res.addHeader("Authorization", "Bearer " + token);
         res.addHeader("access-control-expose-headers", "Authorization");
-	}
+        res.setContentType("application/json");
+
+        out.print(user);
+        out.flush();
+
+    }
 	
 	private class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
 		 

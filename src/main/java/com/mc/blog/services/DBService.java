@@ -1,15 +1,9 @@
 package com.mc.blog.services;
 
-import com.mc.blog.domain.Artigos;
-import com.mc.blog.domain.Categoria;
-import com.mc.blog.domain.Endereco;
-import com.mc.blog.domain.Usuario;
+import com.mc.blog.domain.*;
 import com.mc.blog.domain.enums.Perfil;
-import com.mc.blog.repositories.ArtigosRepository;
-import com.mc.blog.repositories.CategoriaRepository;
-import com.mc.blog.repositories.EnderecoRepository;
+import com.mc.blog.repositories.*;
 
-import com.mc.blog.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +30,9 @@ public class DBService {
 	@Autowired
 	private ArtigosRepository artigosRepository;
 
+	@Autowired
+	private MunicipioRepository municipioRepository;
+
 	
 	public void instantiateTestDatabase() throws ParseException {
 
@@ -45,11 +42,20 @@ public class DBService {
 		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
 
 		cli1.addPerfil(Perfil.ADMIN);
-		
-		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220834", cli1, null);
+
+		cli1.setIsAtivo(true);
+
+		Municipio m1 = new Municipio(1L,"São Luis", "sl");
+		Municipio m2 = new Municipio(2L,"São Bento", "sb");
+		Municipio m3 = new Municipio(3L,"Rosário", "ro");
+		Municipio m4 = new Municipio(4L,"Raposa", "ra");
+		 municipioRepository.saveAll(Arrays.asList(m1,m2,m3,m4));
+
+
+		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220834", cli1, m1);
 
 		
-		cli1.getEnderecos().addAll(Arrays.asList(e1));
+		cli1.setEnderecos(e1);
 
 		cli1 = usuarioRepository.save(cli1);
 		enderecoRepository.saveAll(Arrays.asList(e1));
@@ -68,10 +74,22 @@ public class DBService {
 		c5 =categoriaRepository.save(c5);
 
 
-		Artigos artigos = new Artigos(null,"artigo 1","descricao do artigo 1","url",null,cli1,null);
+		Artigos artigos = new Artigos(null,"artigo 1","descricao do artigo 1","url","Conteudo",cli1,null);
 		artigos.setCategoria(c1);
 
-		artigosRepository.save(artigos);
+        Artigos artigos2 = new Artigos(null,"artigo 1","descricao do artigo 1","url","Conteudo",cli1,null);
+        artigos2.setCategoria(c5);
+
+        Artigos artigos3 = new Artigos(null,"artigo 1","descricao do artigo 3","url","Conteudo",cli1,null);
+        artigos3.setCategoria(c3);
+
+        Artigos artigos4 = new Artigos(null,"artigo 1","descricao do artigo 4","url","Conteudo",cli1,null);
+        artigos4.setCategoria(c4);
+
+		Artigos artigos5 = new Artigos(null,"artigo 1","descricao do artigo 5","url","Conteudo",cli1,null);
+		artigos5.setCategoria(c2);
+
+		artigosRepository.saveAll(Arrays.asList(artigos,artigos2,artigos3,artigos4,artigos5));
 
 	}
 }

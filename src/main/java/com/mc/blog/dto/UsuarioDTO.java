@@ -2,6 +2,7 @@ package com.mc.blog.dto;
 
 
 import com.mc.blog.domain.Usuario;
+import com.mc.blog.domain.enums.Perfil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,19 +19,24 @@ public class UsuarioDTO implements Serializable {
 
 	private Long id;
 
-	@NotEmpty(message="Preenchimento obrigatório")
-	@Length(min=5, max=120, message="O tamanho deve ser entre 5 e 120 caracteres")
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Length(min = 5, max = 120, message = "O tamanho deve ser entre 5 e 120 caracteres")
 	private String nome;
 
-	@NotEmpty(message="Preenchimento obrigatório")
-	@Email(message="Email inválido")
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Email(message = "Email inválido")
 	private String email;
 
+	private Boolean perfil;
+
 	public UsuarioDTO(Usuario obj) {
-		id = obj.getId();
-		nome = obj.getNome();
-		email = obj.getEmail();
+		this.id = obj.getId();
+		this.nome = obj.getNome();
+		this.email = obj.getEmail();
+		this.perfil = obj.getPerfis().contains(Perfil.ADMIN)?true:false;
 	}
+
+
 
 
 }

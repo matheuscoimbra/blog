@@ -26,9 +26,10 @@ public class UsuarioResource {
     private UsuarioService service;
 
     @RequestMapping(value="/{id}", method= RequestMethod.GET)
-    public ResponseEntity<Usuario> find(@PathVariable Long id) {
+    public ResponseEntity<UsuarioNewDTO> find(@PathVariable Long id) {
         Usuario obj = service.find(id);
-        return ResponseEntity.ok().body(obj);
+        UsuarioNewDTO dto = service.toDTO(obj);
+        return ResponseEntity.ok().body(dto);
     }
 
     @RequestMapping(value="/email", method= RequestMethod.GET)
@@ -39,6 +40,11 @@ public class UsuarioResource {
 
     @RequestMapping(method= RequestMethod.POST)
     public ResponseEntity<Void> insert(@Valid @RequestBody UsuarioNewDTO objDto) {
+       /* UsuarioNewDTO usuarioNewDTO = UsuarioNewDTO.builder()
+                .bairro("teste")
+                .cep("121212")
+                .logradouro("fdfd")
+                .build();*/
         Usuario obj = service.fromDTO(objDto);
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()

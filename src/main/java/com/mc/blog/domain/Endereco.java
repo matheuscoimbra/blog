@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,11 +27,11 @@ public class Endereco implements Serializable {
 	private String cep;
 	
 	@JsonIgnore
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name="usuario_id")
 	private Usuario usuario;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name="municipio_id")
 	private Municipio municipio;
 

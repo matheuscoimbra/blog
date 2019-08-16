@@ -1,10 +1,7 @@
 package com.mc.blog.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
@@ -14,7 +11,8 @@ import java.util.List;
 
 
 @NoArgsConstructor
-@Data
+@AllArgsConstructor
+@Data @Builder
 @Table
 @Entity
 public class Categoria implements Serializable {

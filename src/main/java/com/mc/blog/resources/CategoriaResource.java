@@ -29,17 +29,17 @@ public class CategoriaResource {
 	private CategoriaService service;
 
 	@PostMapping
-	public ResponseEntity<Categoria> insert(@Valid @RequestBody Categoria obj) {
-		obj = service.insert(obj);
+	public ResponseEntity<Categoria> insert(@Valid @RequestBody CategoriaDTO obj) {
+		var cat = service.insert(obj);
 
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).body(obj);
+		return ResponseEntity.created(uri).body(cat);
 	}
 
 	@ApiPageable
 	@GetMapping
-	public ResponseEntity<Page<Categoria>> findPage( @ApiParam Pageable pageable) {
+	public ResponseEntity<Page<CategoriaDTO>> findPage( @ApiParam Pageable pageable) {
 		var list = service.findPage(pageable);
 		return ResponseEntity.ok(list);
 	}
@@ -53,8 +53,8 @@ public class CategoriaResource {
 
 
 	@GetMapping(path = {"/{id}"})
-	public ResponseEntity<Categoria> findById(@PathVariable Long id){
-		var obj = service.find(id);
+	public ResponseEntity<CategoriaDTO> findById(@PathVariable Long id){
+		var obj = service.findDTO(id);
 		return ResponseEntity.ok().body(obj);
 	}
 
