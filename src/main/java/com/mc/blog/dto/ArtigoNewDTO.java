@@ -35,6 +35,8 @@ public class ArtigoNewDTO implements Serializable {
     @NotNull(message = "Autor não informado")
     private Long usuario;
 
+
+
     @NotNull(message = "Categoria não informada")
     private Long categoria;
 

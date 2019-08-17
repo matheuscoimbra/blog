@@ -74,19 +74,19 @@ public class DBService {
 		c5 =categoriaRepository.save(c5);
 
 
-		Artigos artigos = new Artigos(null,"artigo 1","descricao do artigo 1","url","Conteudo",cli1,null);
+		Artigos artigos = new Artigos(null,"artigo 1","descricao do artigo 1",null,"Conteudo",cli1,null);
 		artigos.setCategoria(c1);
 
-        Artigos artigos2 = new Artigos(null,"artigo 1","descricao do artigo 1","url","Conteudo",cli1,null);
+        Artigos artigos2 = new Artigos(null,"artigo 2","descricao do artigo 1",null,"Conteudo",cli1,null);
         artigos2.setCategoria(c5);
 
-        Artigos artigos3 = new Artigos(null,"artigo 1","descricao do artigo 3","url","Conteudo",cli1,null);
+        Artigos artigos3 = new Artigos(null,"artigo 3","descricao do artigo 3","url","Conteudo",cli1,null);
         artigos3.setCategoria(c3);
 
-        Artigos artigos4 = new Artigos(null,"artigo 1","descricao do artigo 4","url","Conteudo",cli1,null);
+        Artigos artigos4 = new Artigos(null,"artigo 4","descricao do artigo 4","url","Conteudo",cli1,null);
         artigos4.setCategoria(c4);
 
-		Artigos artigos5 = new Artigos(null,"artigo 1","descricao do artigo 5","url","Conteudo",cli1,null);
+		Artigos artigos5 = new Artigos(null,"artigo 5","descricao do artigo 5","url","Conteudo",cli1,null);
 		artigos5.setCategoria(c2);
 
 		artigosRepository.saveAll(Arrays.asList(artigos,artigos2,artigos3,artigos4,artigos5));

@@ -7,6 +7,7 @@ import com.mc.blog.domain.Categoria;
 import com.mc.blog.dto.ArtigoNewDTO;
 import com.mc.blog.dto.ArtigosCategoriaDTO;
 import com.mc.blog.dto.ArtigosDTO;
+import com.mc.blog.response.Response;
 import com.mc.blog.services.ArtigosService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -62,6 +63,14 @@ public class ArtigoResource {
 	public ResponseEntity<ArtigoNewDTO> findById(@PathVariable Long id){
 		var obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
+	}
+
+	@GetMapping(path = {"/dto/{id}"})
+	public ResponseEntity<Response<ArtigosDTO>> findByIdDto(@PathVariable Long id){
+		var obj = service.findDTO(id);
+		Response response = new Response();
+		response.setData(obj);
+		return ResponseEntity.ok().body(response);
 	}
 
 	@ApiPageable

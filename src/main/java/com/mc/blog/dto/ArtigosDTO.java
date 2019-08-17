@@ -31,4 +31,6 @@ public class ArtigosDTO implements Serializable {
     @JsonProperty("autor")
     private String userNome;
 
+    private String conteudo;
+
 }
