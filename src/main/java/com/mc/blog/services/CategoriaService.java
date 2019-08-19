@@ -130,6 +130,7 @@ public class CategoriaService {
     }
 
 	public List<CategoriaDTO> getTree(List<CategoriaDTO> all ){
+
 		final List<CategoriaDTO> result = new ArrayList<>();
 		final Map<Long, CategoriaDTO> allMap = buildIdMap(all);
 		final Iterator<CategoriaDTO> iterator = all.iterator();
@@ -140,10 +141,10 @@ public class CategoriaService {
 				final CategoriaDTO node = allMap.get(next.getId());
 				final CategoriaDTO nodeP = allMap.get(parentId);
 				if(nodeP != null){
-					if(nodeP.getChild()==null) {
-						nodeP.setChild(new ArrayList<>());
+					if(nodeP.getChildren()==null) {
+						nodeP.setChildren(new ArrayList<>());
 					}
-						nodeP.getChild().add(node);
+						nodeP.getChildren().add(node);
 				}
 			}else{
 
@@ -164,10 +165,10 @@ public class CategoriaService {
 				final CategoriaDTO node = allMap.get(next.getId());
 				final CategoriaDTO nodeP = allMap.get(parentId);
 				if(nodeP != null){
-					if(nodeP.getChild()==null) {
-						nodeP.setChild(new ArrayList<>());
+					if(nodeP.getChildren()==null) {
+						nodeP.setChildren(new ArrayList<>());
 					}
-					nodeP.getChild().add(node);
+					nodeP.getChildren().add(node);
 				}
 			}else{
 

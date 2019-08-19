@@ -17,6 +17,7 @@ public class UserSS implements UserDetails {
 	private String email;
 	private String senha;
 	private String token;
+	private Boolean admin;
 	private Collection<? extends GrantedAuthority> authorities;
 	
 	public UserSS() {
@@ -83,5 +84,13 @@ public class UserSS implements UserDetails {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public Boolean getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
 	}
 }

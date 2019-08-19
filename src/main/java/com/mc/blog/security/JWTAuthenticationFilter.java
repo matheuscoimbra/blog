@@ -2,11 +2,13 @@ package com.mc.blog.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.mc.blog.domain.enums.Perfil;
 import com.mc.blog.dto.CredenciaisDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -66,7 +68,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserSS us = ((UserSS) auth.getPrincipal());
 
         us.setToken(token);
-
+        us.setAdmin(us.getAuthorities().contains(new SimpleGrantedAuthority(Perfil.ADMIN.getDescricao()))?true:false);
         String user = mapper.writeValueAsString(us);
 
         res.addHeader("Authorization", "Bearer " + token);

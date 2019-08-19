@@ -22,7 +22,7 @@ public class CategoriaDTO implements Serializable {
 
     private Long parentId;
 
-    private List<CategoriaDTO> child = new ArrayList<>();
+    private List<CategoriaDTO> children = new ArrayList<>();
 
     private String path;
 
@@ -31,7 +31,7 @@ public class CategoriaDTO implements Serializable {
         this.id = 0L;
         this.nome = "";
         this.parentId = 0L;
-        this.child = new ArrayList<CategoriaDTO>();
+        this.children = new ArrayList<CategoriaDTO>();
         this.path = "";
     }
 }
