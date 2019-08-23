@@ -1,5 +1,7 @@
 package com.mc.blog.services;
 
+import com.mc.blog.converter.DozerConverter;
+import com.mc.blog.domain.Categoria;
 import com.mc.blog.domain.Endereco;
 import com.mc.blog.domain.Municipio;
 import com.mc.blog.domain.Usuario;
@@ -23,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.image.BufferedImage;
 import java.net.URI;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,9 +67,19 @@ public class UsuarioService {
 	}
 	
 	public Usuario update(Usuario obj) {
-		Usuario newObj = find(obj.getId());
-		updateData(newObj, obj);
-		return repo.save(newObj);
+		/*Usuario newObj = find(obj.getId());
+		updateData(newObj, obj);*/
+		return repo.findById(obj.getId())
+				.map(g -> {
+					Usuario updated = DozerConverter.parseObject(obj, Usuario.class);
+					Usuario up = repo.save(updated);
+					enderecoRepository.save(up.getEnderecos());
+					return up;
+
+				}).orElseThrow(() -> new ObjectNotFoundException(
+						"Objeto não encontrado! Id: " + obj.getId() ));
+
+
 	}
 
 	public Page<Usuario> filtro(Pageable pageable, String nome, String cpf) {
@@ -131,9 +144,32 @@ public class UsuarioService {
 	}
 	
 	public Usuario fromDTO(UsuarioNewDTO objDto) {
+		Boolean contem = false;
+		Usuario cli = new Usuario(objDto.getId()==null?null:objDto.getId(), objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), pe.encode(objDto.getSenha()));
+		if(objDto.getId()!=null) {
+			Usuario user = repo.findById(objDto.getId()).get();
+			user.getPerfis().forEach(perfil -> System.out.println(perfil.getCod()));
+			contem = user.getPerfis().stream().anyMatch(perfil -> {
+				return perfil.getCod()==Perfil.ADMIN.getCod();
+			} );
+			if(!contem && objDto.getAdmin()){
+				cli.addPerfil(Perfil.ADMIN);
+			}
+			if(!contem && !objDto.getAdmin()){
+				cli.addPerfil(Perfil.Usuario);
+			}
 
-		Usuario cli = new Usuario(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), pe.encode(objDto.getSenha()));
-		if(objDto.getAdmin()) cli.addPerfil(Perfil.ADMIN); else cli.addPerfil(Perfil.Usuario);
+			if(contem && !objDto.getAdmin()){
+				cli.setPerfis(new HashSet<>());
+				cli.addPerfil(Perfil.Usuario);
+			}
+		}else {
+			if (objDto.getAdmin()) {
+				cli.addPerfil(Perfil.ADMIN);
+			} else {
+				cli.addPerfil(Perfil.Usuario);
+			}
+		}
 		Municipio cid = new Municipio(objDto.getMununicipioId(), null, null);
 		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
 

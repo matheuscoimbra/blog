@@ -53,10 +53,10 @@ public class UsuarioResource {
     }
 
     @RequestMapping(value="/{id}", method= RequestMethod.PUT)
-    public ResponseEntity<Void> update(@Valid @RequestBody UsuarioDTO objDto, @PathVariable Long id) {
+    public ResponseEntity<Void> update(@Valid @RequestBody UsuarioNewDTO objDto, @PathVariable Long id) {
         Usuario obj = service.fromDTO(objDto);
         obj.setId(id);
-        obj = service.update(obj);
+        service.update(obj);
         return ResponseEntity.noContent().build();
     }
 

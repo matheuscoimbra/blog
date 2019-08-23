@@ -40,7 +40,7 @@ public class Usuario implements Serializable {
 
 	@JsonIgnore
 	@Column()
-	private Boolean isAtivo;
+	private Boolean isAtivo=true;
 	
 	@OneToOne(mappedBy="usuario", cascade= CascadeType.ALL)
 	private Endereco enderecos;
