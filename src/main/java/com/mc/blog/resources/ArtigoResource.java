@@ -16,10 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -72,6 +74,7 @@ public class ArtigoResource {
 		response.setData(obj);
 		return ResponseEntity.ok().body(response);
 	}
+
 
 	@ApiPageable
 	@GetMapping(path = {"/{id}/artigos"})

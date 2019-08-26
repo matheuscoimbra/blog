@@ -35,10 +35,10 @@ public class CategoriaService {
 	@Transactional(readOnly = true)
 	public CategoriaDTO findDTO(Long id) {
 		
-		UserSS user = UserService.authenticated();
+	/*	UserSS user = UserService.authenticated();
 		if (user==null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
 			throw new AuthorizationException("Acesso negado");
-		}
+		}*/
 		
 		Optional<CategoriaDTO> obj = Optional.ofNullable(toDTO(repo.findById(id).get()));
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
@@ -49,10 +49,10 @@ public class CategoriaService {
 	@Transactional(readOnly = true)
 	public Categoria find(Long id) {
 
-		UserSS user = UserService.authenticated();
+	/*	UserSS user = UserService.authenticated();
 		if (user==null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
 			throw new AuthorizationException("Acesso negado");
-		}
+		}*/
 
 		Optional<Categoria> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(

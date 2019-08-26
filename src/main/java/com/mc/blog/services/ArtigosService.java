@@ -39,10 +39,10 @@ public class ArtigosService {
 
 	public ArtigoNewDTO find(Long id) {
 		
-		UserSS user = UserService.authenticated();
+		/*UserSS user = UserService.authenticated();
 		if (user==null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
 			throw new AuthorizationException("Acesso negado");
-		}
+		}*/
 		
 		Optional<ArtigoNewDTO> obj = Optional.ofNullable(convertToArtigoNewDTO(repo.findById(id).get()));
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
@@ -51,10 +51,10 @@ public class ArtigosService {
 
 	public ArtigosDTO findDTO(Long id) {
 
-		UserSS user = UserService.authenticated();
+		/*UserSS user = UserService.authenticated();
 		if (user==null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
 			throw new AuthorizationException("Acesso negado");
-		}
+		}*/
 
 		Optional<ArtigosDTO> obj = Optional.ofNullable(convertToArtigosDTO(repo.findById(id).get()));
 		return obj.orElseThrow(() -> new ObjectNotFoundException(

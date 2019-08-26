@@ -45,6 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/configuration/ui",
 			"/swagger-resources/**",
 			"/csrf/**",
+			"/categoria/**",
+			"/artigo/**",
 			"/configuration/security",
 			"/swagger-ui.html",
 			"/webjars/**"
@@ -53,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final String[] PUBLIC_MATCHERS_POST = {
 			"/usuarios/**",
 			"/auth/forgot/**",
+			"/categoria/**",
 			"/auth/validateToken/**",
 			"/auth/refresh_token"
 	};
@@ -60,10 +63,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
+		/*if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
             http.headers().frameOptions().disable();
-        }
-		
+        }*/
+
 		http.cors().and().csrf().disable();
 		http.authorizeRequests()
 			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
