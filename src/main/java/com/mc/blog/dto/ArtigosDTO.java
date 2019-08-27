@@ -1,5 +1,6 @@
 package com.mc.blog.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dozermapper.core.Mapping;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -32,5 +34,9 @@ public class ArtigosDTO implements Serializable {
     private String userNome;
 
     private String conteudo;
+
+    @JsonFormat
+            (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private Date dataCriacao;
 
 }

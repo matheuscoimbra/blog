@@ -11,7 +11,6 @@
     <groupId>com.blog</groupId>
     <artifactId>blog</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
     <name>blog</name>
     <description>Blog with Spring boot</description>
 

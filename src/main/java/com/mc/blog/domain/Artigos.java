@@ -1,5 +1,6 @@
 package com.mc.blog.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -52,6 +54,10 @@ public class Artigos implements Serializable {
     @ManyToOne
     @JoinColumn(name="categoria_id")
     private Categoria categoria;
+
+    @JsonFormat
+            (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private Date dataCriacao=new Date();
 
 
     public String getUserNome(){
