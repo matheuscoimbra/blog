@@ -47,8 +47,6 @@ public class UsuarioNewDTO implements Serializable {
 
 	private String telefone2;
 
-	private String telefone3;
-
 	private Long mununicipioId;
 
 

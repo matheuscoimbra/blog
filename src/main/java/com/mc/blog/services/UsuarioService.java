@@ -178,9 +178,7 @@ public class UsuarioService {
 		if (objDto.getTelefone2()!=null) {
 			cli.getTelefones().add(objDto.getTelefone2());
 		}
-		if (objDto.getTelefone3()!=null) {
-			cli.getTelefones().add(objDto.getTelefone3());
-		}
+
 		return cli;
 	}
 
