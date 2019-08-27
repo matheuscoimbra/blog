@@ -117,9 +117,13 @@ public class ArtigosService {
 		return var.map(this::convertToArtigosDTO);
 	}
 
-	public Page<ArtigoNewDTO> findPageNewDTO(Pageable pageable) {
+	public Page<ArtigoNewDTO> findPageNewDTO(Pageable pageable, String nome) {
+		Artigos artigos = Artigos.builder().nome(nome).build();
 
-		Page<Artigos> var =  repo.findAll(pageable);
+
+		Example<Artigos> example = Example.of(artigos, ExampleMatcher.matching().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)   // Match string containing pattern
+				.withIgnoreCase());
+		Page<Artigos> var =  repo.findAll(example,pageable);
 		return var.map(this::convertToArtigoNewDTO);
 	}
 

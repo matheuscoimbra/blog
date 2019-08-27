@@ -3,7 +3,6 @@ package com.mc.blog.resources;
 
 import com.mc.blog.security.JWTUtil;
 import com.mc.blog.security.UserSS;
-import com.mc.blog.services.AuthService;
 import com.mc.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +20,7 @@ public class AuthResource {
 	@Autowired
 	private JWTUtil jwtUtil;
 	
-	@Autowired
-	private AuthService service;
+
 	
 	@RequestMapping(value = "/refresh_token", method = RequestMethod.POST)
 	public ResponseEntity<Void> refreshToken(HttpServletResponse response) {
@@ -35,7 +33,6 @@ public class AuthResource {
 
 	@RequestMapping(value = "/validateToken/{token}", method = RequestMethod.POST)
 	public ResponseEntity<Boolean> validateToken(@PathVariable String token, HttpServletResponse response) {
-		//UserSS user = UserService.authenticated();
 		Boolean valido = false;
 		if(token == null){
 			valido = false;
@@ -46,9 +43,5 @@ public class AuthResource {
 		return ResponseEntity.ok().body(valido);
 	}
 	
-	/*@RequestMapping(value = "/forgot", method = RequestMethod.POST)
-	public ResponseEntity<Void> forgot(@Valid @RequestBody EmailDTO objDto) {
-		service.sendNewPassword(objDto.getEmail());
-		return ResponseEntity.noContent().build();
-	}*/
+
 }

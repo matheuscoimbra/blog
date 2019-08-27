@@ -56,8 +56,8 @@ public class ArtigoResource {
 
 	@ApiPageable
 	@GetMapping
-	public ResponseEntity<Page<ArtigoNewDTO>> findPageDTO(@ApiParam Pageable pageable) {
-		var list = service.findPageNewDTO(pageable);
+	public ResponseEntity<Page<ArtigoNewDTO>> findPageDTO(@ApiParam Pageable pageable,@RequestParam(value="nome",required = false) String nome) {
+		var list = service.findPageNewDTO(pageable,nome);
 		return ResponseEntity.ok(list);
 	}
 
