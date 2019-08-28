@@ -86,8 +86,8 @@ public class ArtigoResource {
 
 	@ApiOperation(value = "Atualiza um artigo")
 	@PutMapping()
-	public Artigos update(@Valid @RequestBody Artigos agencia){
-		var dto = service.update(agencia);
+	public Artigos update(@Valid @RequestBody ArtigoNewDTO artigo){
+		var dto = service.update(artigo);
 		return dto;
 	}
 

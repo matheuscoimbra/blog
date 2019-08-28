@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -61,6 +62,7 @@ public class CategoriaService {
 	
 	@Transactional
 	public Categoria insert(CategoriaDTO obj) {
+
 		return repo.save(fromDTO(obj));
 	}
 	
@@ -194,13 +196,14 @@ public class CategoriaService {
 	}
 
 	public Categoria fromDTO(CategoriaDTO categoria){
-		return Categoria.builder().nome(categoria.getNome()).categoriaPai(find(categoria.getParentId())).id(null).build();
+		return Categoria.builder().nome(categoria.getNome()).categoriaPai((categoria.getParentId()==0?null:find(categoria.getParentId()))).id(null).build();
 	}
 
 
-
-
-
+	public List<CategoriaDTO> findAll() {
+		List<Categoria> page = repo.findAll();
+		return page.stream().map(this::toDTO).collect(Collectors.toList());
+	}
 }
 
 

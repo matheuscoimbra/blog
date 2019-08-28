@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,6 +67,7 @@ public class ArtigosService {
 
 		Artigos art = fromNewDTO(obj);
 		art.setId(null);
+		art.setDataCriacao(new Date());
 		art = repo.save(art);
 		return art;
 	}
@@ -76,10 +78,14 @@ public class ArtigosService {
 				conteudo(obj.getConteudo()).descricao(obj.getDescricao()).url(obj.getUrl()).build();
 	}
 
-	public Artigos update(Artigos obj) {
+	public Artigos update(ArtigoNewDTO obj) {
 		return repo.findById(obj.getId())
 				.map(g -> {
-					Artigos updated = DozerConverter.parseObject(obj, Artigos.class);
+					Artigos updated =  Artigos.builder().nome(obj.getNome()).
+					dataCriacao(g.getDataCriacao()).conteudo(obj.getConteudo()).descricao(obj.getDescricao()).
+					url(obj.getUrl()).id(obj.getId()).usuario(usuarioService.find(obj.getUsuario())).
+					categoria(categoriaService.find(obj.getCategoria())).build();
+
 					//updated.setTrechos(null);
 					Artigos up = repo.save(updated);
 					//up.setTrechos(trechoService.findAllByLinha(up.getId()));

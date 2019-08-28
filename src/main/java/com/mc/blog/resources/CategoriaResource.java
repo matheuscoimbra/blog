@@ -44,6 +44,14 @@ public class CategoriaResource {
 		return ResponseEntity.ok(list);
 	}
 
+
+	@ApiPageable
+	@GetMapping("/list")
+	public ResponseEntity<List<CategoriaDTO>> findList( ) {
+		var list = service.findAll();
+		return ResponseEntity.ok(list);
+	}
+
 	@ApiPageable
 	@GetMapping(value = "/tree")
 	public ResponseEntity<List<CategoriaDTO>> findTree() {

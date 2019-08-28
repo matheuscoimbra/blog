@@ -52,6 +52,11 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+
         <!--<dependency>
             <groupId>com.cmeza</groupId>
             <artifactId>spring-data-generator</artifactId>
@@ -152,6 +157,19 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <configuration>
+                    <url>jdbc:postgresql://localhost:5432/blog?useTimezone=true&amp;serverTimezone=UTC&amp;useSSL=false</url>
+                    <user>postgress</user>
+                    <password>postgress</password>
+                    <schemas>
+                        <schema>blog</schema>
+                    </schemas>
+                </configuration>
+
             </plugin>
         </plugins>
     </build>

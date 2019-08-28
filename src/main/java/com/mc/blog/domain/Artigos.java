@@ -39,7 +39,6 @@ public class Artigos implements Serializable {
     @Size(max = 1000)
     private String url;
 
-    @Lob
     @Column()
     private String conteudo;
 
