@@ -27,7 +27,7 @@ public class CategoriaDTO implements Serializable {
     private String path;
 
 
-    public CategoriaDTO() { 
+    public CategoriaDTO() {
         this.id = 0L;
         this.nome = "";
         this.parentId = 0L;
