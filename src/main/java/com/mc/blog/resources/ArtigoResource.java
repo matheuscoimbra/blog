@@ -7,6 +7,7 @@ import com.mc.blog.domain.Categoria;
 import com.mc.blog.dto.ArtigoNewDTO;
 import com.mc.blog.dto.ArtigosCategoriaDTO;
 import com.mc.blog.dto.ArtigosDTO;
+import com.mc.blog.dto.CalendarDTO;
 import com.mc.blog.response.Response;
 import com.mc.blog.services.ArtigosService;
 import io.swagger.annotations.Api;
@@ -51,7 +52,12 @@ public class ArtigoResource {
 		return ResponseEntity.ok(list);
 	}
 
-
+	@ApiPageable
+	@GetMapping(value = "/lista")
+	public ResponseEntity<List<CalendarDTO>> findList() {
+		var list = service.findAll();
+		return ResponseEntity.ok(list);
+	}
 
 
 	@ApiPageable

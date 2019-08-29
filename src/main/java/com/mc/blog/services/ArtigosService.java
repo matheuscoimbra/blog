@@ -2,16 +2,10 @@ package com.mc.blog.services;
 
 import com.mc.blog.converter.DozerConverter;
 import com.mc.blog.domain.*;
-import com.mc.blog.domain.enums.Perfil;
-import com.mc.blog.dto.ArtigoNewDTO;
-import com.mc.blog.dto.ArtigosCategoriaDTO;
-import com.mc.blog.dto.ArtigosDTO;
-import com.mc.blog.dto.CategoriaDTO;
+import com.mc.blog.dto.*;
 
 import com.mc.blog.repositories.ArtigosRepository;
 
-import com.mc.blog.security.UserSS;
-import com.mc.blog.services.exceptions.AuthorizationException;
 import com.mc.blog.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -23,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ArtigosService {
@@ -137,6 +132,10 @@ public class ArtigosService {
 		return DozerConverter.parseObject(entity, ArtigosDTO.class);
 	}
 
+	private CalendarDTO convertToCalendarDTO(Artigos entity) {
+		return CalendarDTO.builder().title(entity.getNome()).startDate(entity.getDataCriacao()).id(entity.getId()).build();
+	}
+
 	private ArtigoNewDTO convertToArtigoNewDTO(Artigos e) {
 		return ArtigoNewDTO.builder().id(e.getId())
 				.categoria(e.getCategoria().getId()).usuario(e.getUsuario().getId())
@@ -190,5 +189,10 @@ public class ArtigosService {
 
 	public void setCats(List<Categoria> cats) {
 		this.cats = cats;
+	}
+
+	public List<CalendarDTO> findAll() {
+		var artigos =  repo.findAll();
+		return artigos.stream().map(this::convertToCalendarDTO).collect(Collectors.toList());
 	}
 }
