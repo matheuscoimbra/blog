@@ -72,6 +72,17 @@ public class UsuarioService {
 		return repo.findById(obj.getId())
 				.map(g -> {
 					Usuario updated = DozerConverter.parseObject(obj, Usuario.class);
+					Boolean contem = false;
+					contem = obj.getPerfis().stream().anyMatch(perfil -> {
+						return perfil.getCod()==Perfil.ADMIN.getCod();
+					} );
+					if(contem){
+						updated.setPerfis(new HashSet<>());
+						updated.addPerfil(Perfil.ADMIN);
+					}else{
+						updated.setPerfis(new HashSet<>());
+						updated.addPerfil(Perfil.Usuario);
+					}
 					Usuario up = repo.save(updated);
 					enderecoRepository.save(up.getEnderecos());
 					return up;
@@ -172,8 +183,15 @@ public class UsuarioService {
 			}
 		}
 		Municipio cid = new Municipio(objDto.getMununicipioId(), null, null);
-		Endereco end = new Endereco(objDto.getEnderecoId()==null?null:objDto.getEnderecoId(), objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
+		Endereco end = null;
+		if(objDto.getEnderecoId()==null){
+			end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
 
+		}else{
+			end  = enderecoRepository.findById(objDto.getEnderecoId()).get();
+			end = new Endereco(end.getId(), objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
+
+		}
 		cli.setEnderecos(end);
 		cli.getTelefones().add(objDto.getTelefone1());
 		if (objDto.getTelefone2()!=null) {
@@ -195,6 +213,7 @@ public class UsuarioService {
 		usuarioNewDTO.setNumero(o.getEnderecos().getNumero());
 		usuarioNewDTO.setCpfOuCnpj(o.getCpf());
 		usuarioNewDTO.setId(o.getId());
+		usuarioNewDTO.setEnderecoId(o.getEnderecos().getId());
 		usuarioNewDTO.setLogradouro(o.getEnderecos().getLogradouro());
 		usuarioNewDTO.setMununicipioId(o.getEnderecos().getMunicipio().getId());
 		usuarioNewDTO.setComplemento(o.getEnderecos().getComplemento());
