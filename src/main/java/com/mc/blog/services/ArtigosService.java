@@ -133,7 +133,7 @@ public class ArtigosService {
 	}
 
 	private CalendarDTO convertToCalendarDTO(Artigos entity) {
-		return CalendarDTO.builder().title(entity.getNome()).startDate(entity.getDataCriacao()).id(entity.getId()).build();
+		return CalendarDTO.builder().title(entity.getNome()).startDate(entity.getDataCriacao()).id(entity.getId()).classes("orange").build();
 	}
 
 	private ArtigoNewDTO convertToArtigoNewDTO(Artigos e) {

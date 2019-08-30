@@ -49,6 +49,7 @@ public class UsuarioNewDTO implements Serializable {
 
 	private Long mununicipioId;
 
+	private Long enderecoId;
 
 	private Long id;
 

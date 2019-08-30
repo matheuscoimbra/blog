@@ -164,14 +164,15 @@ public class UsuarioService {
 				cli.addPerfil(Perfil.Usuario);
 			}
 		}else {
-			if (objDto.getAdmin()) {
+
+			if (objDto.getAdmin()!=null) {
 				cli.addPerfil(Perfil.ADMIN);
 			} else {
 				cli.addPerfil(Perfil.Usuario);
 			}
 		}
 		Municipio cid = new Municipio(objDto.getMununicipioId(), null, null);
-		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
+		Endereco end = new Endereco(objDto.getEnderecoId()==null?null:objDto.getEnderecoId(), objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
 
 		cli.setEnderecos(end);
 		cli.getTelefones().add(objDto.getTelefone1());

@@ -20,4 +20,6 @@ public class CalendarDTO implements Serializable {
     private String title;
 
     private Date startDate;
+
+    private String classes;
 }

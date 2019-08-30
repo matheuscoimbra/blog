@@ -6,6 +6,7 @@ import com.mc.blog.domain.enums.Perfil;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,16 +26,20 @@ public class Usuario implements Serializable {
 	@Column(name = "usuario_id",nullable = false)
 	private Long id;
 
+	@NotNull(message = "Informe o nome do usuário")
 	@Column(nullable = false)
 	private String nome;
-	
+
+	@NotNull(message = "Informe o email do usuário")
 	@Column(unique=true,nullable = false)
 	private String email;
 
+	@NotNull(message = "Informe o cpf do usuário")
 	@Column(length=11,nullable = false)
 	private String cpf;
 
 	@JsonIgnore
+	@NotNull(message = "Informe a senha do usuário")
 	@Column(nullable = false)
 	private String senha;
 

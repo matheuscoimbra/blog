@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
@@ -19,11 +20,15 @@ public class Endereco implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column(name = "id",nullable = false)
 	private Long id;
 	private String logradouro;
+	@NotNull(message = "Informe o Nº")
 	private String numero;
 	private String complemento;
+	@NotNull(message = "Informe o nome do bairro")
 	private String bairro;
+	@NotNull(message = "Informe o CEP")
 	private String cep;
 	
 	@JsonIgnore
