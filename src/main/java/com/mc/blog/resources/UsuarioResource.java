@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value="/usuarios")
+@RequestMapping(value="/usuarios") 
 public class UsuarioResource {
 
     @Autowired
