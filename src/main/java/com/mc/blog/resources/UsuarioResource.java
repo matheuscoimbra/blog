@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value="/usuarios") 
+@RequestMapping(value="/usuarios")
 public class UsuarioResource {
 
     @Autowired
@@ -38,6 +38,7 @@ public class UsuarioResource {
         return ResponseEntity.ok().body(obj);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(method= RequestMethod.POST)
     public ResponseEntity<Void> insert(@Valid @RequestBody UsuarioNewDTO objDto) {
 
@@ -48,6 +49,7 @@ public class UsuarioResource {
         return ResponseEntity.created(uri).build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(value="/{id}", method= RequestMethod.PUT)
     public ResponseEntity<Void> update(@Valid @RequestBody UsuarioNewDTO objDto, @PathVariable Long id) {
         Usuario obj = service.fromDTO(objDto);
@@ -63,8 +65,8 @@ public class UsuarioResource {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    @RequestMapping(method= RequestMethod.GET)
+
+    @GetMapping
     public ResponseEntity<List<UsuarioDTO>> findAll() {
         List<Usuario> list = service.findAll();
         List<UsuarioDTO> listDto = list.stream().map(obj -> new UsuarioDTO(obj)).collect(Collectors.toList());
