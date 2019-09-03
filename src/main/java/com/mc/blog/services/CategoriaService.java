@@ -185,7 +185,7 @@ public class CategoriaService {
 				categoria -> {dtos.add(toDTO(categoria));}
 		);
 		return  getTree(dtos);
-	}
+	} 
 
 
 
