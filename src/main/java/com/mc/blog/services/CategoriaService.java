@@ -70,9 +70,7 @@ public class CategoriaService {
 		return repo.findById(obj.getId())
 				.map(g -> {
 					Categoria updated = DozerConverter.parseObject(obj, Categoria.class);
-					//updated.setTrechos(null);
 					Categoria up = repo.save(updated);
-					//up.setTrechos(trechoService.findAllByLinha(up.getId()));
 					return up;
 
 				}).orElseThrow(() -> new ObjectNotFoundException(

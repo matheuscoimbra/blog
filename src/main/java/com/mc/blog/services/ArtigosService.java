@@ -80,10 +80,7 @@ public class ArtigosService {
 					dataCriacao(g.getDataCriacao()).conteudo(obj.getConteudo()).descricao(obj.getDescricao()).
 					url(obj.getUrl()).id(obj.getId()).usuario(usuarioService.find(obj.getUsuario())).
 					categoria(categoriaService.find(obj.getCategoria())).build();
-
-					//updated.setTrechos(null);
 					Artigos up = repo.save(updated);
-					//up.setTrechos(trechoService.findAllByLinha(up.getId()));
 					return up;
 
 				}).orElseThrow(() -> new ObjectNotFoundException(
