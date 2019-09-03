@@ -67,7 +67,7 @@ public class UsuarioService {
 	}
 	
 	public Usuario update(Usuario obj) {
-		
+
 		return repo.findById(obj.getId())
 				.map(g -> {
 					Usuario updated = DozerConverter.parseObject(obj, Usuario.class);
