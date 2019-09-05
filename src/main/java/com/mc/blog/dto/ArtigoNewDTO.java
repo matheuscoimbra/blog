@@ -12,6 +12,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,8 +37,9 @@ public class ArtigoNewDTO implements Serializable {
     private Long usuario;
 
 
-
     @NotNull(message = "Categoria não informada")
     private Long categoria;
+
+    private List<String> tags;
 
 }

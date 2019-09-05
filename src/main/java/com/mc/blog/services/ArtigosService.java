@@ -13,10 +13,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,18 +65,15 @@ public class ArtigosService {
 	}
 
 	private Artigos fromNewDTO(ArtigoNewDTO obj) {
-		return Artigos.builder().categoria(categoriaService.find(obj.getCategoria())).
+		return Artigos.builder().categoria(categoriaService.find(obj.getCategoria())).id(obj==null?null:obj.getId()).
 				usuario(usuarioService.find(obj.getUsuario())).nome(obj.getNome()).
-				conteudo(obj.getConteudo()).descricao(obj.getDescricao()).url(obj.getUrl()).build();
+				conteudo(obj.getConteudo()).descricao(obj.getDescricao()).tags(String.join(",", obj.getTags())).url(obj.getUrl()).build();
 	}
 
 	public Artigos update(ArtigoNewDTO obj) {
 		return repo.findById(obj.getId())
 				.map(g -> {
-					Artigos updated =  Artigos.builder().nome(obj.getNome()).
-					dataCriacao(g.getDataCriacao()).conteudo(obj.getConteudo()).descricao(obj.getDescricao()).
-					url(obj.getUrl()).id(obj.getId()).usuario(usuarioService.find(obj.getUsuario())).
-					categoria(categoriaService.find(obj.getCategoria())).build();
+					Artigos updated =  fromNewDTO(obj);
 					Artigos up = repo.save(updated);
 					return up;
 
@@ -125,8 +119,10 @@ public class ArtigosService {
 		return var.map(this::convertToArtigoNewDTO);
 	}
 
-	private ArtigosDTO convertToArtigosDTO(Artigos entity) {
-		return DozerConverter.parseObject(entity, ArtigosDTO.class);
+	private ArtigosDTO convertToArtigosDTO(Artigos e) {
+		return ArtigosDTO.builder().id(e.getId()).tags(e.getTags()==null?null:(Arrays.asList(e.getTags().split("\\s*,\\s*"))))
+				.url(e.getUrl()).descricao(e.getDescricao()).dataCriacao(e.getDataCriacao()).nome(e.getNome())
+				.conteudo(e.getConteudo()).userNome(e.getUserNome()).build();
 	}
 
 	private CalendarDTO convertToCalendarDTO(Artigos entity) {
@@ -135,7 +131,7 @@ public class ArtigosService {
 
 	private ArtigoNewDTO convertToArtigoNewDTO(Artigos e) {
 		return ArtigoNewDTO.builder().id(e.getId())
-				.categoria(e.getCategoria().getId()).usuario(e.getUsuario().getId())
+				.categoria(e.getCategoria().getId()).tags(e.getTags()==null?null:(Arrays.asList(e.getTags().split("\\s*,\\s*")))).usuario(e.getUsuario().getId())
 				.conteudo(e.getConteudo()).descricao(e.getDescricao())
 				.nome(e.getNome()).url(e.getUrl()).build();
 	}

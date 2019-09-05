@@ -42,6 +42,7 @@ public class Artigos implements Serializable {
     @Column()
     private String conteudo;
 
+
     @JsonIgnoreProperties({"artigos"})
     @NotNull(message = "Autor não informado")
     @ManyToOne
@@ -58,6 +59,9 @@ public class Artigos implements Serializable {
             (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date dataCriacao=new Date();
 
+
+    @Column()
+    private String tags;
 
     public String getUserNome(){
         return usuario.getNome();

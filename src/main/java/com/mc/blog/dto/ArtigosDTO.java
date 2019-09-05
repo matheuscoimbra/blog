@@ -13,16 +13,15 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-@Getter
+@Getter @AllArgsConstructor
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode @Builder
 public class ArtigosDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Mapping("id")
-    @JsonProperty("id")
-    private Long key;
+    private Long id;
 
     private String nome;
 
@@ -34,6 +33,8 @@ public class ArtigosDTO implements Serializable {
     private String userNome;
 
     private String conteudo;
+
+    private List<String> tags;
 
     @JsonFormat
             (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
